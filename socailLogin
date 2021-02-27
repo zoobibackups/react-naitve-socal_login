@@ -1,0 +1,157 @@
+      useEffect(() =>{
+            GetCountryCodeModules.getcountrycode().then((countrycode) =>{
+                var results = findByMatchingProperties(countries[0].items, { code: `${countrycode}`.toLocaleUpperCase()});
+              //  setDefaultCountry(results[0])
+            });
+
+            Dimensions.addEventListener('change', () => {
+                setOrientation(isPortrait() ? 'portrait' : 'landscape')
+            })
+            configureGoogleSignIn();
+        },[])
+
+     
+     
+     const  configureGoogleSignIn = () =>  {
+            try {
+                GoogleSignin.configure({webClientId:"166945368943-oos7vbpl4p5jqqc8a85au3vlrd5numha.apps.googleusercontent.com"})
+            }catch(error){
+                console.log(error, "Error in config")
+            }
+        }
+
+        // const GooglesignIn = async () => {
+        //     setLoading(true)
+        //     try {
+        //         GoogleSignin.hasPlayServices({ 
+        //             autoResolve: true ,
+        //             showPlayServicesUpdateDialog: true
+        //         }).then((kk) => {
+                    
+        //         })
+        //         .catch((err) => {
+        //             console.log(err, "Error")
+        //         })
+        //         const userInfo = await GoogleSignin.signIn();
+        //         const googleCredential = auth.GoogleAuthProvider.credential(userInfo.idToken);
+        //         auth().signInWithCredential(googleCredential).then((data) => {
+        //             console.log(data)
+        //            navigation.navigate("SocialProfileScreen",{
+        //                name:data.user.displayName, 
+        //                email:data.user.email,
+        //                photo:data.user.photoURL
+        //             })
+        //             setLoading(false)
+        //         }).catch((error) => {
+        //             setLoading(false);
+        //             console.log(error, 'Some Error')
+        //         })
+        //     } catch (error) {
+        //         console.log(error, 'Error')
+        //         switch (error.code) {
+        //             case statusCodes.SIGN_IN_CANCELLED:
+        //                 setLoading(false)
+        //                 alert('Sign In Cancelled')
+        //             break;
+        //             case statusCodes.IN_PROGRESS:
+        //                 setLoading(false)
+        //                 alert('SignIn In Preogress')
+        //             break;
+        //             case statusCodes.PLAY_SERVICES_NOT_AVAILABLE:
+        //                 setLoading(false)
+        //                 alert('Google Play Services Not avaliable')
+        //             break;
+        //             default:
+        //                 setLoading(false)
+        //                 alert('Some Error Occured')
+        //         }
+        //     }
+        // };
+    
+        
+        // const faceboooklogin  = () =>{
+        //     setLoading(true)
+        //     LoginManager.logInWithPermissions(["public_profile", 'email',]).then(
+        //         async function(result) {
+        //             if (result.isCancelled) {
+        //                 setLoading(false)
+        //                 alert("Loginnded cancelled");
+                        
+        //             } else {
+        //                 const data =  await AccessToken.getCurrentAccessToken();
+                        
+        //                 if (!data) {
+        //                     alert('Something went wrong. please try again.');
+        //                     setLoading(false)
+        //                     return;
+        //                 }
+        //                 const facebookCredential = auth.FacebookAuthProvider.credential(data.accessToken);
+                        
+        //                 auth().signInWithCredential(facebookCredential).then(async (data) => {
+        //                     // navigate here to socil profile screen,
+        //                     let kk = await getFacebookEmail();
+        //                     if(kk !== null){
+        //                             console.log(kk)
+        //                     }else{
+        //                         alert('Error in retreving data')
+        //                     }
+        //                     console.log(data)
+        //                     setLoading(false);
+        //                 }).catch(async (error) =>{
+        //                     if(error.code === "auth/account-exists-with-different-credential"){
+        //                         const email = await getFacebookEmail();
+        //                         if(email){
+        //                             try{
+        //                                 // Get sign-in methods for this email.
+        //                                 auth().fetchSignInMethodsForEmail("engr.aftabufaq@gmail.com").then(function(methods) {
+        //                                       if(methods[0] === 'google.com'){
+        //                                           alert("You have already signin with google. Please use google signIn");
+        //                                           setLoading(false)
+        //                                       }
+        //                                 }).catch((error) => {
+        //                                     alert('Something went wrong. please try again.');
+        //                                     setLoading(false);
+        //                                 })
+        //                             }catch(error){
+        //                                 alert('Something went wrong. please try again.');
+        //                                 setLoading(false);
+        //                             }
+        //                         }
+        //                     }
+        //                 })
+        //             }
+        //         },
+        //         function(error) {
+        //             console.log("Login fail with error: " + error);
+        //         }
+        //     );
+        // }
+        
+        
+         const getFacebookEmail = useCallback(
+            () =>
+              new Promise(resolve => {
+                const infoRequest = new GraphRequest(
+                  'me?fields=id,name,email,picture{height,width,url}',
+                  null,
+                  (error, result) => {
+                    if (error) {
+                      console.log('Error fetching data: ' + error.toString());
+                      resolve(null);
+                      return;
+                    }
+          
+                    if (result) {
+                        console.log(result , 'Resulttt')
+                      resolve(result);
+                    } else {
+                      resolve(null);
+                    }
+                  },
+                );
+                new GraphRequestManager().addRequest(infoRequest).start();
+              }),
+            [],
+          );
+          
+          
